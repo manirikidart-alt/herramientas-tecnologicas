@@ -1,41 +1,200 @@
-// ================================
-// Página CRM y Comercio Electrónico
-// ================================
+/* =====================================================
+   HERRAMIENTAS TECNOLÓGICAS
+   CRM y Comercio Electrónico
+   Autor: Luis Ricardo Zúñiga Sánchez
+===================================================== */
 
-// Mensaje de bienvenida
-window.addEventListener("load", () => {
-    console.log("Sitio cargado correctamente.");
+document.addEventListener("DOMContentLoaded", () => {
+
+    iniciarScrollSuave();
+    crearBotonArriba();
+    animacionTarjetas();
+    efectoNavbar();
+    crearBotonModoOscuro();
+
 });
 
-// Scroll suave
-document.querySelectorAll('nav a').forEach(link => {
+/* =====================================================
+      SCROLL SUAVE
+===================================================== */
 
-    link.addEventListener('click', function(e){
+function iniciarScrollSuave(){
 
-        e.preventDefault();
+    const enlaces = document.querySelectorAll('nav a');
 
-        const destino = document.querySelector(this.getAttribute('href'));
+    enlaces.forEach(enlace=>{
 
-        destino.scrollIntoView({
-            behavior:'smooth'
+        enlace.addEventListener("click",function(e){
+
+            e.preventDefault();
+
+            const destino = document.querySelector(this.getAttribute("href"));
+
+            destino.scrollIntoView({
+
+                behavior:"smooth"
+
+            });
+
         });
 
     });
 
-});
+}
 
-// Animación de aparición
+/* =====================================================
+      BOTÓN VOLVER ARRIBA
+===================================================== */
 
-const tarjetas = document.querySelectorAll(".card");
+function crearBotonArriba(){
 
-const observer = new IntersectionObserver(entries => {
+    const boton=document.createElement("button");
 
-    entries.forEach(entry => {
+    boton.innerHTML="↑";
+
+    boton.id="btnTop";
+
+    document.body.appendChild(boton);
+
+    window.addEventListener("scroll",()=>{
+
+        if(window.scrollY>300){
+
+            boton.style.display="block";
+
+        }else{
+
+            boton.style.display="none";
+
+        }
+
+    });
+
+    boton.addEventListener("click",()=>{
+
+        window.scrollTo({
+
+            top:0,
+
+            behavior:"smooth"
+
+        });
+
+    });
+
+}
+
+/* =====================================================
+      EFECTO NAVBAR
+===================================================== */
+
+function efectoNavbar(){
+
+    const nav=document.querySelector("nav");
+
+    window.addEventListener("scroll",()=>{
+
+        if(window.scrollY>50){
+
+            nav.style.background="#0d47a1";
+
+            nav.style.boxShadow="0 8px 20px rgba(0,0,0,.25)";
+
+        }
+
+        else{
+
+            nav.style.background="#0d47a1";
+
+            nav.style.boxShadow="none";
+
+        }
+
+    });
+
+}
+
+/* =====================================================
+      ANIMACIÓN DE TARJETAS
+===================================================== */
+
+function animacionTarjetas(){
+
+    const tarjetas=document.querySelectorAll(".card");
+
+    const observer=new IntersectionObserver(
+
+        entries=>{
+
+            entries.forEach(entry=>{
+
+                if(entry.isIntersecting){
+
+                    entry.target.style.opacity="1";
+
+                    entry.target.style.transform="translateY(0px)";
+
+                }
+
+            });
+
+        },
+
+        {
+
+            threshold:.20
+
+        }
+
+    );
+
+    tarjetas.forEach(card=>{
+
+        card.style.opacity="0";
+
+        card.style.transform="translateY(50px)";
+
+        card.style.transition=".8s";
+
+        observer.observe(card);
+
+    });
+
+}
+
+/* =====================================================
+      CONTADOR DE ESTADÍSTICAS
+===================================================== */
+
+function contador(elemento,final){
+
+    let numero=0;
+
+    const intervalo=setInterval(()=>{
+
+        numero++;
+
+        elemento.textContent=numero;
+
+        if(numero>=final){
+
+            clearInterval(intervalo);
+
+        }
+
+    },20);
+
+}
+
+const observerNumeros=new IntersectionObserver(entries=>{
+
+    entries.forEach(entry=>{
 
         if(entry.isIntersecting){
 
-            entry.target.style.opacity = "1";
-            entry.target.style.transform = "translateY(0px)";
+            const numero=entry.target;
+
+            contador(numero,Number(numero.dataset.numero));
 
         }
 
@@ -43,60 +202,154 @@ const observer = new IntersectionObserver(entries => {
 
 });
 
-tarjetas.forEach(card => {
+document.querySelectorAll(".contador").forEach(numero=>{
 
-    card.style.opacity="0";
-    card.style.transform="translateY(40px)";
-    card.style.transition=".8s";
-
-    observer.observe(card);
+    observerNumeros.observe(numero);
 
 });
 
-// Botón para volver arriba
+/* =====================================================
+      MODO OSCURO
+===================================================== */
 
-const boton = document.createElement("button");
+function crearBotonModoOscuro(){
 
-boton.innerHTML="↑";
+    const boton=document.createElement("button");
 
-boton.id="btnTop";
+    boton.innerHTML="🌙";
 
-document.body.appendChild(boton);
+    boton.id="modoOscuro";
 
-boton.style.position="fixed";
-boton.style.bottom="20px";
-boton.style.right="20px";
-boton.style.padding="12px 16px";
-boton.style.border="none";
-boton.style.borderRadius="50%";
-boton.style.background="#1565c0";
-boton.style.color="white";
-boton.style.cursor="pointer";
-boton.style.display="none";
-boton.style.fontSize="18px";
-boton.style.boxShadow="0 5px 10px rgba(0,0,0,.3)";
+    document.body.appendChild(boton);
 
-window.addEventListener("scroll",()=>{
+    boton.style.position="fixed";
 
-    if(window.scrollY>300){
+    boton.style.bottom="90px";
 
-        boton.style.display="block";
+    boton.style.right="20px";
 
-    }else{
+    boton.style.width="55px";
 
-        boton.style.display="none";
+    boton.style.height="55px";
+
+    boton.style.borderRadius="50%";
+
+    boton.style.border="none";
+
+    boton.style.background="#263238";
+
+    boton.style.color="white";
+
+    boton.style.cursor="pointer";
+
+    boton.style.fontSize="20px";
+
+    boton.style.boxShadow="0 5px 15px rgba(0,0,0,.3)";
+
+    boton.addEventListener("click",()=>{
+
+        document.body.classList.toggle("dark");
+
+        if(document.body.classList.contains("dark")){
+
+            boton.innerHTML="☀";
+
+        }
+
+        else{
+
+            boton.innerHTML="🌙";
+
+        }
+
+    });
+
+}
+
+/* =====================================================
+      EFECTO ESCRITURA DEL TÍTULO
+===================================================== */
+
+const titulo=document.querySelector("header h1");
+
+if(titulo){
+
+    const texto=titulo.textContent;
+
+    titulo.textContent="";
+
+    let i=0;
+
+    function escribir(){
+
+        if(i<texto.length){
+
+            titulo.textContent+=texto.charAt(i);
+
+            i++;
+
+            setTimeout(escribir,70);
+
+        }
 
     }
 
-});
+    escribir();
 
-boton.addEventListener("click",()=>{
+}
 
-    window.scrollTo({
+/* =====================================================
+      REVELAR SECCIONES
+===================================================== */
 
-        top:0,
-        behavior:"smooth"
+const secciones=document.querySelectorAll("section");
+
+const observerSecciones=new IntersectionObserver(entries=>{
+
+    entries.forEach(entry=>{
+
+        if(entry.isIntersecting){
+
+            entry.target.classList.add("mostrar");
+
+        }
 
     });
 
 });
+
+secciones.forEach(sec=>{
+
+    sec.classList.add("oculta");
+
+    observerSecciones.observe(sec);
+
+});
+
+/* =====================================================
+      MENSAJE DE BIENVENIDA
+===================================================== */
+
+setTimeout(()=>{
+
+    console.log("Bienvenido al sitio web sobre CRM y Comercio Electrónico");
+
+},1000);
+
+/* =====================================================
+      AÑO AUTOMÁTICO EN EL FOOTER
+===================================================== */
+
+const footer=document.querySelector("footer");
+
+if(footer){
+
+    const año=new Date().getFullYear();
+
+    const p=document.createElement("p");
+
+    p.innerHTML="© "+año+" | Proyecto Académico UAEMéx";
+
+    footer.appendChild(p);
+
+}
